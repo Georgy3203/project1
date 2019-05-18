@@ -1,7 +1,15 @@
-'use strict'
+let money,time;
 
-let money = prompt("Ваш бюджет на месяц?", ''),
-	time = prompt('Введите дату в формате YYYY-MM-DD', '');
+function start(){
+    money = +prompt("Ваш бюджет на месяц?", '');
+    time = prompt('Введите дату в формате YYYY-MM-DD', '');
+    
+    while(isNaN(money) || money == "" || money ==null){
+        money = +prompt("Ваш бюджет на месяц?", '');
+    }
+}
+start();
+
 
 console.log(money);
 console.log(time);
@@ -12,15 +20,54 @@ let AppData = {
     expenses:{},
     optionalExpenses:{},
     income: [],
-    saving:false
+    saving:true
 };
 
-let a1 = prompt("Введите обязательную статью расходов в этом месяце", ''),
-	a2 = prompt("Во сколько обойдется?", ''),
-	a3 = prompt("Введите обязательную статью расходов в этом месяце", ''),
-	a4 = prompt("Во сколько обойдется?", '');
 
-appData.expenses.a1 = a2;
-appData.expenses.a3 = a4;
 
-alert(appData.budget / 30);
+    function chooseExpenses(){
+        for( let i = 0;i <2 ;i++) {
+            let a = prompt("Введите обязательную статью расходов в этом месяце", ''),
+                b = prompt("Во сколько обойдется?", '');
+                
+                if ( (typeof(a))=== 'string' && (typeof(a)) != null && (typeof(b)) != null &&
+                     a != '' && b != '' && a.length < 50){
+                    console.log("done");
+                    AppData.expenses[a] = b;
+                }else {
+                    i=i-1;    
+                }
+                
+        }
+    }
+chooseExpenses();
+   
+function detectDayBudget(){
+    AppData.moneyPerDay = (AppData.budget / 30).toFixed();
+
+    alert('Ежедневный бюджет: ' + AppData.moneyPerDay);
+
+    if (AppData.moneyPerDay < 100){
+        console.log('Минимальный уровень достатка');
+    }else if (AppData.moneyPerDay > 100 && AppData.moneyPerDay < 2000 ){
+        console.log('Средний уровень достатка');
+    }else if (AppData.moneyPerDay > 2000){
+        console.log('Высокий уровень достатка');
+    }else{
+        console.log('Произошла ошибка');
+    }
+}
+
+
+
+function checkSavings(){
+    if (AppData.saving == true){
+        let save = +prompt('Какова сумма накоплений?'),
+            procent = +prompt('Под какой процент?');
+
+        AppData.monthIncome = save/100/12*procent;
+        alert('Доход в месяц в вашем депозите равна: ' + AppData.monthIncome);
+    }
+}
+checkSavings();
+
